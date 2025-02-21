@@ -43,22 +43,7 @@ public class Webhook {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("response.statusCode() = " + response.statusCode());
             System.out.println("response.body() = " + response.body());
-
-            if(response.statusCode() >= 200 && response.statusCode()<300) {
-                String[] parts1 = response.body.split("url\" : \"");
-                if (parts1.length >1) {
-                    String resultUrlPart = parts1[1];
-                    String[] parts2 = resultUrlPart.split("\",");
-                    result = parts2[0];
-                } else {
-                    System.err.println("Error: 'url\": \"' not found in response body. Response body: " + response.body());
-                result = null; // 또는 오류 처리
-                }
-            }else {
-            System.err.println("HTTP request failed with status code: " + response.statusCode());
-            System.err.println("Response body: " + response.body());
-            result = null; // 또는 오류 처리
-           // result = response.body().split("url\": \"")[1].split("\",")[0];
+            result = response.body().split("url\": \"")[1].split("\",")[0];
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -92,25 +77,7 @@ public class Webhook {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("response.statusCode() = " + response.statusCode());
             System.out.println("response.body() = " + response.body());
-
-            if (response.statusCode() >= 200 && response.statusCode() < 300) { // HTTP 성공 상태 코드 검사
-            String[] parts1 = response.body().split("\"content\":\"");
-            if (parts1.length > 1) { // 배열 길이 검사: 길이가 2 이상일 때만 인덱스 1 접근
-                String resultContentPart = parts1[1];
-                String[] parts2 = resultContentPart.split("\"},\"logprobs\"");
-                result = parts2[0];
-            } else {
-                System.err.println("Error: '\"content\":\"' not found in response body. Response body: " + response.body());
-                result = null; // 또는 오류 처리
-            }
-        } else {
-            System.err.println("HTTP request failed with status code: " + response.statusCode());
-            System.err.println("Response body: " + response.body());
-            result = null; // 또는 오류 처리
-        }
-
-
-           // result = response.body().split("\"content\":\"")[1].split("\"},\"logprobs\"")[0];
+            result = response.body().split("\"content\":\"")[1].split("\"},\"logprobs\"")[0];
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
